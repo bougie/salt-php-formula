@@ -1,0 +1,18 @@
+{%- macro ini_block(value, key=None, operator=' = ', delim='') -%}
+    {%- if value != None -%}
+        {%- if value is number or value is string -%}
+{{key}}{{operator}}{{value}}{{delim}}
+        {%- elif value is mapping %}
+{{'[' ~ key ~ ']'}}
+            {%- for k,v in value.items() %}
+{{ini_block(v, k, operator, delim)}}
+            {%- endfor %}
+        {%- elif value is iterable -%}
+            {%- for v in value %}
+{{ini_block(v, key, operator, delim)}}
+            {%- endfor %}
+        {%- else -%}
+{{key}}{{operator}}{{value}}{{delim}}
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
