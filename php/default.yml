@@ -12,7 +12,7 @@ FreeBSD:
                 defaults:
                     global:
                         pid: run/php-fpm.pid
-                defaults_vhost:
+                defaults_pool:
                     listen: /var/run/php-fpm.sock
                     user: www
                     group: www

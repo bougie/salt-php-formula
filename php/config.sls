@@ -5,31 +5,31 @@
 {% if 'fpm' in rawmap.pkgs and 'fpm' in rawmap.config%}
     {% set cfg = rawmap.config %}
 
-    {% set vhosts = [] %}
-    {% set fpm_vhosts_config = salt['pillar.get']('php:config:fpm:ini:vhosts') %}
+    {% set pools = [] %}
+    {% set fpm_pools_config = salt['pillar.get']('php:config:fpm:ini:pools') %}
 fpm_config:
-    {% if fpm_vhosts_config is mapping %}
-        {% set tmp_vhosts_list = fpm_vhosts_config.keys() %}
-    {% elif fpm_vhosts_config is iterable %}
-        {% set tmp_vhosts_list = [] %}
-        {% if fpm_vhosts_config is string or fpm_vhosts_config is number %}
-            {% do tmp_vhosts_list.append(fpm_vhosts_config) %}
+    {% if fpm_pools_config is mapping %}
+        {% set tmp_pools_list = fpm_pools_config.keys() %}
+    {% elif fpm_pools_config is iterable %}
+        {% set tmp_pools_list = [] %}
+        {% if fpm_pools_config is string or fpm_pools_config is number %}
+            {% do tmp_pools_list.append(fpm_pools_config) %}
         {% else %}
-            {% for item in fpm_vhosts_config %}
+            {% for item in fpm_pools_config %}
                 {% if item is string or item is number %}
-                    {% do tmp_vhosts_list.append(item) %}
+                    {% do tmp_pools_list.append(item) %}
                 {% elif item is mapping %}
-                    {% do tmp_vhosts_list.append(item.items()[0][0]) %}
+                    {% do tmp_pools_list.append(item.items()[0][0]) %}
                 {% endif %}
             {% endfor %}
         {% endif %}
     {% else %}
-        {% set tmp_vhosts_list = [] %}
+        {% set tmp_pools_list = [] %}
     {% endif %}
-    {% for vhost_id in tmp_vhosts_list %}
-        {% set vhost_pillar = salt['pillar.get']('php:config:fpm:ini:vhosts:' ~ vhost_id, {}, merge=True) %}
-        {% do deep_merge(vhost_pillar, cfg.fpm.ini.defaults_vhost) %}
-        {% do vhosts.append({vhost_id: vhost_pillar}) %}
+    {% for pool_id in tmp_pools_list %}
+        {% set pool_pillar = salt['pillar.get']('php:config:fpm:ini:pools:' ~ pool_id, {}, merge=True) %}
+        {% do deep_merge(pool_pillar, cfg.fpm.ini.defaults_pool) %}
+        {% do pools.append({pool_id: pool_pillar}) %}
     {% endfor %}
     file.managed:
         - name: {{cfg.fpm.config_file}}
@@ -37,7 +37,7 @@ fpm_config:
         - template: jinja
         - context:
             config: {{salt['pillar.get']('php:config:fpm:ini:global', cfg.fpm.ini.defaults, merge=True)}}
-            vhosts_config: {{vhosts}}
+            pools_config: {{pools}}
 
 fpm_php_config:
     file.managed:
