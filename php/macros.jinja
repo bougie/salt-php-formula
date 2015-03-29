@@ -16,3 +16,19 @@
         {%- endif -%}
     {%- endif -%}
 {%- endmacro -%}
+
+{# merge dict 'b' into 'a' with no overriding values in 'a' with 'b' one #}
+{% macro deep_merge(a, b) %}
+    {% for k,v in b.items() %}
+        {% if v is mapping %}
+            {% if a[k] is not mapping: %}
+                {% do a.update({k: {}}) %}
+            {% endif %}
+            {% do deep_merge(a[k], v) %}
+        {% else %}
+            {% if k not in a %}
+                {% do a.update({k: v}) %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endmacro %}

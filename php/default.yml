@@ -12,6 +12,17 @@ FreeBSD:
                 defaults:
                     global:
                         pid: run/php-fpm.pid
+                defaults_vhost:
+                    listen: /var/run/php-fpm.sock
+                    user: www
+                    group: www
+                    listen.owner: www
+                    listen.group: www
+                    pm: dynamic
+                    pm.max_children: 5
+                    pm.start_servers: 2
+                    pm.min_spare_servers: 1
+                    pm.max_spare_servers: 1
         php:
             ini:
                 defaults:
