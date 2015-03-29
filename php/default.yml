@@ -1,10 +1,8 @@
 {% load_yaml as rawmap %}
 FreeBSD:
     lookup:
-        php_package: php
-        fpm_package: php-fpm
-    pkgs:
-        - fpm
+        php_package: php56
+        fpm_package: php56
     config:
         fpm:
             service: php-fpm
