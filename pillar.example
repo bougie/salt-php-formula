@@ -10,7 +10,7 @@ php:
             config_file: /usr/local/etc/php/php-fpm.conf
             php_file: /usr/local/etc/php/fpm/php.ini
             ini:
-                poolss:
+                pools:
                     www:
                         user: www
                         group: www
