@@ -3,6 +3,18 @@ FreeBSD:
     lookup:
         php_package: php56
         fpm_package: php56
+        mysqli_package: php56-mysqli
+        mysql_package: php56-mysql
+        nbstring_package: php56-mbstring
+        iconv_package: php56-iconv
+        curl_package: php56-curl
+        pcntl_package: php56-pcntl
+        gd_package: php56-gd
+        filter_package: php56-filter
+        json_package: php56-json
+        hash_package: php56-hash
+        openssl_package: php56-openssl
+        ctype_package: php56-ctype
     config:
         fpm:
             service: php-fpm
